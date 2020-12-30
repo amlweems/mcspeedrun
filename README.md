@@ -9,10 +9,19 @@ manage minecraft speedrun servers
 * Compute stronghold coordinates using [dantoye/throwpro](https://github.com/dantoye/throwpro)
   * Throw a pearl and look at the center
   * Press F3+C to copy current coordinates
-  * Type `tp` and paste to end "p/execute ..." in chat
+  * Type `tp` and paste to enter "p/execute ..." in chat
 
 ![Screenshot of gameplay messages.](docs/gameplay.png)
 ![Screenshot of server logs.](docs/server.png)
+
+## Install
+
+Download the [release binaries](https://github.com/amlweems/mcspeedrun/releases)
+or build from `main` using `go`:
+
+```
+go build
+```
 
 ## Usage
 
