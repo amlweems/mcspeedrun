@@ -132,6 +132,8 @@ func (g *Game) HandleLog(line string) {
 	switch {
 	case strings.Contains(text, "> rr"):
 		typ = "cmd.reset"
+	case strings.Contains(text, ": Set the time to 0]"):
+		typ = "cmd.retime"
 	case strings.Contains(text, "> ./execute in minecraft"):
 		typ = "cmd.player"
 	case strings.Contains(text, "> p/execute in minecraft"):

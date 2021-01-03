@@ -139,6 +139,14 @@ func (s *Session) Loop(ctx context.Context) {
 				s.Active.Reset(ctx)
 				s.Active = nil
 
+			case "cmd.retime":
+				log.Printf("reset session timer")
+				s.TimeStart = evt.Timestamp
+				s.Active.Command(ctx, "/scoreboard players set @a timer_t 0")
+				s.Active.Command(ctx, "/scoreboard players set @a timer_s 0")
+				s.Active.Command(ctx, "/scoreboard players set @a timer_m 0")
+				s.Active.Command(ctx, "/scoreboard players set @a timer_h 0")
+
 			case "cmd.player":
 				s.Active.HandleThrow(ctx, evt.Payload)
 
