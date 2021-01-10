@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dantoye/throwpro/throwlib"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
@@ -28,7 +27,6 @@ type Game struct {
 	Ready  bool
 	Events chan Event
 
-	Thrower *throwlib.Session
 	Client  *client.Client
 }
 
@@ -134,10 +132,6 @@ func (g *Game) HandleLog(line string) {
 		typ = "cmd.reset"
 	case strings.Contains(text, ": Set the time to 0]"):
 		typ = "cmd.retime"
-	case strings.Contains(text, "> ./execute in minecraft"):
-		typ = "cmd.player"
-	case strings.Contains(text, "> p/execute in minecraft"):
-		typ = "cmd.pearl"
 	case strings.Contains(text, "For help, type \"help\""):
 		typ = "generated"
 	case strings.Contains(text, "joined the game"):
@@ -191,35 +185,6 @@ func (g *Game) Monitor(ctx context.Context) {
 			}
 		}
 	}
-}
-
-// HandleThrow parses an /execute command and uses dantoye/throwpro to compute
-// the stronghold location. Posts the location in chat.
-func (g *Game) HandleThrow(ctx context.Context, line string) {
-	idx := strings.Index(line, "/execute")
-	text := line[idx:len(line)]
-	throw, err := throwlib.NewThrowFromString(text)
-	if err != nil {
-		log.Printf("[%s] skipping invalid throw: %s", g.Name, err)
-		return
-	}
-
-	if line[idx-1] == '.' {
-		text = fmt.Sprintf("Location: [%.0f, %.0f]", throw.X, throw.Y)
-		g.Say(ctx, text, "green")
-		return
-	}
-
-	g.Thrower.Throws = append(g.Thrower.Throws, throw)
-	guess := g.Thrower.BestGuess(g.Thrower.Throws...)
-	if guess.Method == "reset" {
-		g.Thrower.Throws = []throwlib.Throw{throw}
-		guess = g.Thrower.BestGuess(g.Thrower.Throws...)
-	}
-
-	x, y := throwlib.Chunk(guess.Chunk).Staircase()
-	text = fmt.Sprintf("Portal: [%d, %d] with %.1f%% confidence", x, y, float64(guess.Confidence)/10)
-	g.Say(ctx, text, "green")
 }
 
 // Reset marks a server as not-ready and kills the container.

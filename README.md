@@ -6,10 +6,6 @@ manage minecraft speedrun servers
 * Proxy connections to the running server
 * Type `rr` in chat to reset a server
 * Detect game events and record splits in chat
-* Compute stronghold coordinates using [dantoye/throwpro](https://github.com/dantoye/throwpro)
-  * Throw a pearl and look at the center
-  * Press F3+C to copy current coordinates
-  * Type `tp` and paste to enter "p/execute ..." in chat
 
 ![Screenshot of gameplay messages.](docs/gameplay.png)
 ![Screenshot of server logs.](docs/server.png)

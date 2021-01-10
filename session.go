@@ -11,7 +11,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dantoye/throwpro/throwlib"
 	"github.com/docker/docker/client"
 )
 
@@ -75,7 +74,6 @@ func (s *Session) NewGame(id int) {
 		ID:      id,
 		Image:   s.Image,
 		Name:    fmt.Sprintf("mcspeedrun_%d", id),
-		Thrower: throwlib.NewSession(),
 		Client:  s.Client,
 		Events:  s.Events,
 	}
@@ -146,14 +144,6 @@ func (s *Session) Loop(ctx context.Context) {
 				s.Active.Command(ctx, "/scoreboard players set @a timer_s 0")
 				s.Active.Command(ctx, "/scoreboard players set @a timer_m 0")
 				s.Active.Command(ctx, "/scoreboard players set @a timer_h 0")
-
-			case "cmd.player":
-				s.Active.HandleThrow(ctx, evt.Payload)
-
-			case "cmd.pearl":
-				s.Active.HandleThrow(ctx, evt.Payload)
-				text := fmt.Sprintf("Pearl: [%s]", evt.Timestamp.Sub(s.TimeStart))
-				s.Active.Say(ctx, text, "green")
 
 			case "generated":
 				s.Replicas[evt.GameID].Ready = true
